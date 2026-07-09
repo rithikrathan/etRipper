@@ -50,3 +50,10 @@ Thumbs.db
 *.config.local
 /private/
 
+# Project-specific
+/DWIN_SET/
+/node_modules/
+/venv/
+*.egg-info/
+__pycache__/
+
