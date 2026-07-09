@@ -1,0 +1,87 @@
+screen:
+  width: 480
+  height: 800
+
+captures:
+  # --- Guide hitboxes (pure black + magenta) ---
+  - selector: "#main-screen"
+    output: "00_Guide_Hitboxes.png"
+    mode: guide
+    full: true
+
+  # --- Clean background (all dynamic elements hidden) ---
+  - selector: "#main-screen"
+    output: "00_MainScreen.png"
+    mode: base
+    full: true
+
+  # --- Normal mode: widgets ---
+  - selector: "#ui-header"
+    output: "Icon_Sources/001_Header.png"
+
+  - selector: "#widget-temp"
+    output: "Icon_Sources/002_Temp_Widget.png"
+
+  - selector: "#conn-status"
+    output: "Icon_Sources/003_Wifi_Connected.png"
+
+  - selector: "#conn-status"
+    output: "Icon_Sources/004_Wifi_Disconnected.png"
+    setup: "window.toggleConnection()"
+
+  # --- Control cards: OFF then ON ---
+  - selector: "#ctrl-1"
+    output: "Icon_Sources/010_Light_1_OFF.png"
+
+  - selector: "#ctrl-1"
+    output: "Icon_Sources/011_Light_1_ON.png"
+    setup: "document.querySelector('#ctrl-1 input[type=checkbox]').click()"
+
+  - selector: "#ctrl-2"
+    output: "Icon_Sources/012_Fan_1_OFF.png"
+
+  - selector: "#ctrl-2"
+    output: "Icon_Sources/013_Fan_1_ON.png"
+    setup: "document.querySelector('#ctrl-2 input[type=checkbox]').click()"
+
+  - selector: "#ctrl-3"
+    output: "Icon_Sources/014_Light_2_OFF.png"
+
+  - selector: "#ctrl-3"
+    output: "Icon_Sources/015_Light_2_ON.png"
+    setup: "document.querySelector('#ctrl-3 input[type=checkbox]').click()"
+
+  - selector: "#ctrl-4"
+    output: "Icon_Sources/016_Fan_2_OFF.png"
+
+  - selector: "#ctrl-4"
+    output: "Icon_Sources/017_Fan_2_ON.png"
+    setup: "document.querySelector('#ctrl-4 input[type=checkbox]').click()"
+
+  - selector: "#ctrl-5"
+    output: "Icon_Sources/018_Light_3_OFF.png"
+
+  - selector: "#ctrl-5"
+    output: "Icon_Sources/019_Light_3_ON.png"
+    setup: "document.querySelector('#ctrl-5 input[type=checkbox]').click()"
+
+  - selector: "#ctrl-6"
+    output: "Icon_Sources/020_Fan_3_OFF.png"
+
+  - selector: "#ctrl-6"
+    output: "Icon_Sources/021_Fan_3_ON.png"
+    setup: "document.querySelector('#ctrl-6 input[type=checkbox]').click()"
+
+  - selector: "#ctrl-7"
+    output: "Icon_Sources/022_Television_OFF.png"
+
+  - selector: "#ctrl-7"
+    output: "Icon_Sources/023_Television_ON.png"
+    setup: "document.querySelector('#ctrl-7 input[type=checkbox]').click()"
+
+  - selector: "#ctrl-8"
+    output: "Icon_Sources/024_Heater_OFF.png"
+
+  - selector: "#ctrl-8"
+    output: "Icon_Sources/025_Heater_ON.png"
+    setup: "document.querySelector('#ctrl-8 input[type=checkbox]').click()"
