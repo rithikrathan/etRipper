@@ -1,2 +1,3 @@
 playwright>=1.52
 pyyaml>=6.0
+Pillow>=10.0

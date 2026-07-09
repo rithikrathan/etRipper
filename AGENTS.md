@@ -103,9 +103,58 @@ Activate this context when working on the etRipper framework itself (React/TS co
 
 ### Python Guidelines (Ripper)
 - Standard library + `playwright` + `pyyaml`.
-- `capturer.py` exports `capture_element(page, selector, filepath, padding)` and `capture_full(page, selector, filepath)`.
+- `capturer.py` exports `screenshot(page, selector, filepath)` — determines format from file extension (`.png` → save raw bytes with alpha, `.bmp` → Pillow convert RGB).
 - `rip.py` is the CLI entry point. Never hardcode selectors or output paths — everything comes from config.
 - Run with `./venv/bin/python3 ripper/rip.py <url> --config <path>`.
+
+### Rip Config — Asset Types & Capture Rules
+
+The ripper produces two kinds of assets. They must not be confused.
+
+**1. Page backgrounds** — full 480×800 captures of a page with dynamic elements hidden (base mode) or touch hitboxes visible (guide mode). These form the static canvas that DWIN displays behind all overlays.
+
+```
+selector: "#main-screen"    # the Canvas viewport wrapper
+output:   "NN_<Name>.bmp"   # BMP, no alpha, full viewport
+mode:     "base"/"guide"    # base → clean BG, guide → magenta hitboxes
+page:     "NN"              # page ID for auto-switch
+```
+
+**2. Element captures** — isolated, reusable widget sub-elements with transparent backgrounds. These are overlays that DWIN places on top of the page background at known coordinates. They must NOT include any static layout (labels, backgrounds, borders, static icons) — that belongs in the page background.
+
+```
+selector: ".slider, .led, .checkbox-box, .radio-dot, .slider-thumb"   # the reusable sub-element
+output:   "Icon_Sources/<Name>_<STATE>.png"                            # PNG with transparency
+```
+
+**Critical rules for element captures:**
+
+| Do NOT capture | Because |
+|---|---|
+| Whole cards/rows/wrappers (`#ctrl-1`, `.device-row`, `.checkbox-row`) | They include container backgrounds, borders, labels — static layout baked into the page background |
+| Labels, device names, section headers | Static text belongs in the page background BMP |
+| Numeric values, dynamic temperatures | DWIN writes its own variable values |
+| Static icons (lightbulb, fan, fire icons) | Part of the card's static appearance, already in page background |
+| Progress bars at a specific fill % | DWIN controls fill width — capture just the empty track and fill bar |
+
+| Do capture | As | States |
+|---|---|---|
+| Toggle slider (the track + knob) | transparent PNG | slider OFF, slider ON |
+| LED dot | transparent PNG | LED dim, LED glowing |
+| Checkbox box | transparent PNG | unchecked, checked |
+| Radio dot | transparent PNG | unselected, selected |
+| Slider empty track | transparent PNG | always same |
+| Slider filled portion | transparent PNG | full-width (DWIN clips/stretches) |
+| Slider thumb | transparent PNG | always same |
+| Push button region | transparent PNG | released, pressed |
+| Status badge | transparent PNG | connected badge, disconnected badge |
+| Device status indicator | transparent PNG | online, offline |
+
+**State ordering:** capture OFF/neutral first, then ON/pressed/toggled. Each element resets to its normal mode after capture. Use `setup` JS to toggle the state for subsequent captures.
+
+**`page:` field** — every capture should specify which page to show. Ripper tracks the current page and calls `window.setPage(n)` only when switching.
+
+**Default order:** page backgrounds first (base, then guide — each resets mode after capture), then element captures grouped by page.
 
 ### Makefile Targets
 ```
@@ -147,11 +196,31 @@ Read **`RULES.md`** first. It defines all DWIN display constraints: viewport siz
 3. Wire the layout into `src/App.tsx` inside `<Canvas>`.
 4. Add entries to `rip-config.yaml`:
    ```yaml
-   - selector: "#new-element"
-     output: "Icon_Sources/XXX_Name.png"
-   - selector: "#new-element"
-     output: "Icon_Sources/XXX_Name_ON.png"
-     setup: "document.querySelector('#new-element .slider').click()"
+   # Page background (always first, with page)
+   - selector: "#main-screen"
+     output: "00.bmp"
+     mode: base
+     page: "00"
+
+   # Guide overlay (always second, with page)
+   - selector: "#main-screen"
+     output: "00_Guide_Hitboxes.bmp"
+     mode: guide
+     page: "00"
+
+   # Static element (page switch handled by auto-track)
+   - selector: "#widget-temp"
+     output: "Icon_Sources/002_Temp_Widget.bmp"
+     page: "00"
+
+   # Toggle: OFF then ON
+   - selector: "#ctrl-1"
+     output: "Icon_Sources/010_Light_1_OFF.bmp"
+     page: "00"
+   - selector: "#ctrl-1"
+     output: "Icon_Sources/011_Light_1_ON.bmp"
+     page: "00"
+     setup: "document.querySelector('#ctrl-1 input').click()"
    ```
 5. Test with `npm run dev`, then rip with `make rip`.
 
@@ -161,10 +230,45 @@ Each `rip-config.yaml` capture entry supports:
 |---|---|---|
 | `selector` | yes | CSS selector targeting the element |
 | `output` | yes | Relative path in `DWIN_SET/` |
+| `page` | no | Page ID (`"00"`, `"01"`...) — ripper calls `window.setPage(n)` before capture |
 | `mode` | no | `"base"` or `"guide"` — applies DGUS mode before capture |
 | `setup` | no | JS to execute before capture (e.g. toggle state) |
-| `full` | no | `true` — use element `.screenshot()` instead of clipped page screenshot |
-| `padding` | no | Extra pixels around the bounding box clip (default 0) |
+
+### Rip Config Rules
+- **Page backgrounds** → `NN_{Name}.bmp` (24-bit BMP, no alpha), `mode: base`, `page: "NN"`. Selector `#main-screen` (full viewport).
+- **Guide overlay** → `NN_Guide_Hitboxes.bmp` (BMP for DGUS touch config), `mode: guide`, `page: "NN"`. Same page-number prefix.
+- **Element captures** → `Icon_Sources/{NNN}_{Name}_{STATE}.png` (transparent PNG). Only the reusable sub-element — never the wrapper card/row.
+- **`page:` field** — every entry should specify its page. The ripper tracks the current page and auto-switches.
+- **Order:** page backgrounds first (base, then guide — each resets mode after itself), then element captures grouped by page. Toggle ON after OFF so the page resets to its default state.
+
+### Element Capture Rules (Critical)
+| Do NOT capture | Reason |
+|---|---|
+| Full cards, rows, wrappers | Include container backgrounds, borders, labels — static layout goes in page background |
+| Labels, section headers, device names | Static text belongs in page background BMP |
+| Numeric values, dynamic readouts | DWIN writes its own variable values |
+| Static icons (lightbulb, fan, etc.) | Part of card's static appearance, already in page background |
+| Progress bars at specific fill % | DWIN controls fill width — capture just empty track and fill bar |
+
+| Do capture (sub-element) | As | States |
+|---|---|---|
+| Toggle slider track+knob | transparent PNG | OFF, ON |
+| LED indicator dot | transparent PNG | dim, glowing |
+| Checkbox box (the square) | transparent PNG | unchecked, checked |
+| Radio dot (the circle) | transparent PNG | unselected, selected |
+| Slider empty track | transparent PNG | always same |
+| Slider filled bar | transparent PNG | full-width (DWIN clips) |
+| Slider thumb knob | transparent PNG | always same |
+| Push button | transparent PNG | released, pressed |
+| Status badge | transparent PNG | connected, disconnected |
+| Device status badge | transparent PNG | online, offline |
+
+### Mode System
+- **Normal** (no param) — full UI visible, all interactive elements functional.
+- **Base** (`?mode=base`) — hides dynamic elements (icons, toggle knobs, text, LEDs) leaving a clean background BMP.
+- **Guide** (`?mode=guide`) — pure black screen with only touch hitboxes shown in magenta for DGUS touch config.
+- The ripper navigates these via `window.setDgusBaseMode()`, `window.setDgusGuideMode()`, `window.resetDgusMode()`.
+- Connection state is toggled via `window.toggleConnection()`.
 
 ### Mode System
 - **Normal** (no param) — full UI visible, all interactive elements functional.
