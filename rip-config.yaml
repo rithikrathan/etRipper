@@ -19,21 +19,18 @@ captures:
   - selector: "#ui-header"
     output: "Icon_Sources/001_Header.png"
 
-  - selector: "#widget-temp"
-    output: "Icon_Sources/002_Temp_Widget.png"
+  - selector: "#conn-status"
+    output: "Icon_Sources/002_Wifi_Connected.png"
 
   - selector: "#conn-status"
-    output: "Icon_Sources/003_Wifi_Connected.png"
-
-  - selector: "#conn-status"
-    output: "Icon_Sources/004_Wifi_Disconnected.png"
+    output: "Icon_Sources/003_Wifi_Disconnected.png"
     setup: "window.toggleConnection()"
 
   - selector: "#sensor-status"
-    output: "Icon_Sources/005_Sensor_Online.png"
+    output: "Icon_Sources/004_Sensor_Online.png"
 
   - selector: "#sensor-status"
-    output: "Icon_Sources/006_Sensor_Offline.png"
+    output: "Icon_Sources/005_Sensor_Offline.png"
     setup: "window.toggleSensor()"
 
   # --- Control cards: OFF then ON ---
