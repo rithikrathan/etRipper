@@ -7,8 +7,8 @@ function Header({ connected, onToggle }: Props) {
   return (
     <div className="header" id="ui-header">
       <div className="header-left">
-        <i className="fas fa-microchip" />
-        <h1>IntelliGB</h1>
+        <i className="fas fa-couch" />
+        <h1>Living Room</h1>
       </div>
       <div
         className={"status-badge " + (connected ? "connected" : "disconnected")}

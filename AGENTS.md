@@ -6,7 +6,8 @@
 
 ## Documentation (Notes)
 - **Location:** `/mnt/sda4/projects/notes/internshipHomeAutomation/`
-- This folder is the **primary reference** for the target architecture and API design.
+- This path is on the **author's device** ([github.com/rithikrathan](https://github.com/rithikrathan)) and may not exist on other machines.
+- The notes folder is the **primary reference** for the target architecture and API design.
 - If there is a conflict between code and notes, **notes take priority** — the notes document the intended final product.
 
 ## Role

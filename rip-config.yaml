@@ -29,6 +29,13 @@ captures:
     output: "Icon_Sources/004_Wifi_Disconnected.png"
     setup: "window.toggleConnection()"
 
+  - selector: "#sensor-status"
+    output: "Icon_Sources/005_Sensor_Online.png"
+
+  - selector: "#sensor-status"
+    output: "Icon_Sources/006_Sensor_Offline.png"
+    setup: "window.toggleSensor()"
+
   # --- Control cards: OFF then ON ---
   - selector: "#ctrl-1"
     output: "Icon_Sources/010_Light_1_OFF.png"

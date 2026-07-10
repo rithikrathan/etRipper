@@ -26,12 +26,19 @@ clean:
 	@echo "Cleaned $(OUT)/"
 
 rip: clean
-	@echo "Starting dev server..."
-	@npm run dev & \
-	  PID=$$!; \
+	@if ss -tlnp 2>/dev/null | grep -q ':3000 '; then \
+	  echo "Dev server already running on $(HOST)"; \
+	  SERVER_PID=; \
+	else \
+	  echo "Starting dev server..."; \
+	  npm run dev & \
+	  SERVER_PID=$$!; \
 	  sleep 3; \
-	  echo "Ripping assets from $(HOST) using $(CONFIG)..."; \
-	  ./venv/bin/python3 ripper/rip.py http://$(HOST) --config $(CONFIG) --out $(OUT); \
+	fi; \
+	echo "Ripping assets from $(HOST) using $(CONFIG)..."; \
+	./venv/bin/python3 ripper/rip.py http://$(HOST) --config $(CONFIG) --out $(OUT); \
+	if [ -n "$$SERVER_PID" ]; then \
 	  echo "Stopping server..."; \
-	  kill $$PID 2>/dev/null; \
-	  echo "Done."
+	  kill $$SERVER_PID 2>/dev/null; \
+	fi; \
+	echo "Done."

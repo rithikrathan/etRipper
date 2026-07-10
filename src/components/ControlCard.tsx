@@ -10,9 +10,9 @@ function ControlCard({ id, label, icon }: Props) {
   const [on, setOn] = useState(false);
 
   return (
-    <div className={"control-item" + (on ? " active" : "")} id={id}>
-      <div className="control-top">
-        <div className="control-icon">
+    <div className={"ctrl-card" + (on ? " active" : "")} id={id}>
+      <div className="cc-top">
+        <div className="cc-icon">
           <i className={"fas fa-" + icon} />
         </div>
         <label className="toggle">
@@ -24,14 +24,9 @@ function ControlCard({ id, label, icon }: Props) {
           <span className="slider" />
         </label>
       </div>
-      <div className="control-bottom">
-        <div className="text-group">
-          <div className="control-name">{label}</div>
-          <div className="status-group">
-            <div className="led" />
-            <div className="control-status">{on ? "ON" : "Off"}</div>
-          </div>
-        </div>
+      <div className="cc-bottom">
+        <div className="cc-label">{label}</div>
+        <div className={"cc-status" + (on ? " on" : "")}>{on ? "ON" : "OFF"}</div>
       </div>
     </div>
   );

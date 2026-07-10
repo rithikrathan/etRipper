@@ -15,10 +15,9 @@ function ControlsGrid() {
   return (
     <>
       <div className="section-label">
-        <i className="fas fa-layer-group" />
-        <span>Switches</span>
+        <span>Devices</span>
       </div>
-      <div className="controls-grid">
+      <div className="ctrl-grid-2">
         {controls.map((c) => (
           <ControlCard key={c.id} id={c.id} label={c.label} icon={c.icon} />
         ))}

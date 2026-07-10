@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Canvas from "./components/Canvas";
 import Header from "./components/Header";
 import TempDisplay from "./components/TempDisplay";
 import ControlsGrid from "./components/ControlsGrid";
@@ -7,6 +6,7 @@ import "./styles/global.css";
 
 function App() {
   const [connected, setConnected] = useState(true);
+  const [sensorOnline, setSensorOnline] = useState(true);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -20,6 +20,7 @@ function App() {
 
   useEffect(() => {
     (window as any).toggleConnection = () => setConnected((c) => !c);
+    (window as any).toggleSensor = () => setSensorOnline((c) => !c);
     (window as any).setDgusBaseMode = () => {
       document.body.className = "dgus-base-mode";
     };
@@ -32,14 +33,19 @@ function App() {
   }, []);
 
   return (
-    <Canvas width={480} height={800}>
-      <Header
-        connected={connected}
-        onToggle={() => setConnected((c) => !c)}
-      />
-      <TempDisplay />
-      <ControlsGrid />
-    </Canvas>
+    <div className="device-screen" id="main-screen">
+      <div className="canvas">
+        <Header
+          connected={connected}
+          onToggle={() => setConnected((c) => !c)}
+        />
+        <TempDisplay
+          sensorOnline={sensorOnline}
+          onToggleSensor={() => setSensorOnline((c) => !c)}
+        />
+        <ControlsGrid />
+      </div>
+    </div>
   );
 }
 
