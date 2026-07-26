@@ -344,7 +344,7 @@
 .climate-readout {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .climate-readout-icon {
@@ -353,12 +353,20 @@
 }
 
 .climate-readout-val {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
   font-family: "JetBrains Mono", monospace;
   font-size: 56px;
   font-weight: 800;
-  color: #d9f99d; /* Acid Green Data */
+  color: #d9f99d;
   line-height: 1;
   letter-spacing: -2px;
+}
+
+.th-val-slot {
+  display: inline-block;
+  min-width: 80px;
 }
 
 .climate-readout-unit {
@@ -366,7 +374,6 @@
   font-size: 24px;
   font-weight: 800;
   color: #52525b;
-  margin-left: 4px;
 }
 
 .climate-divider {
@@ -377,8 +384,7 @@
 
 .climate-sensor-row {
   display: flex;
-  justify-content: center;
-  gap: 12px;
+  justify-content: space-between;
   border-top: 2px dashed #27272a;
   padding-top: 16px;
 }
