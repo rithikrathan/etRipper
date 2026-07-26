@@ -3,89 +3,177 @@ screen:
   height: 800
 
 captures:
-  # --- Guide hitboxes (pure black + magenta) ---
+  # =============================================
+  # Page 0: Unlock Screen
+  # =============================================
   - selector: "#main-screen"
     output: "00_Guide_Hitboxes.png"
     mode: guide
     full: true
+    page: "page0"
 
-  # --- Clean background (all dynamic elements hidden) ---
   - selector: "#main-screen"
-    output: "00_MainScreen.png"
+    output: "00_UnlockScreen.png"
     mode: base
     full: true
+    page: "page0"
 
-  # --- Normal mode: widgets ---
+  - selector: "#unlock-btn"
+    output: "Icon_Sources/000_Unlock_Btn.png"
+    page: "page0"
+
+  # =============================================
+  # Page 1: Room Selector
+  # =============================================
+  - selector: "#main-screen"
+    output: "01_Guide_Hitboxes.png"
+    mode: guide
+    full: true
+    page: "page1"
+
+  - selector: "#main-screen"
+    output: "01_RoomSelector.png"
+    mode: base
+    full: true
+    page: "page1"
+
+  - selector: "#back-btn"
+    output: "Icon_Sources/050_Back_Btn.png"
+    page: "page1"
+
+  - selector: "#living-room"
+    output: "Icon_Sources/051_Room_LivingRoom.png"
+    page: "page1"
+
+  - selector: "#bedroom"
+    output: "Icon_Sources/052_Room_Bedroom.png"
+    page: "page1"
+
+  - selector: "#kitchen"
+    output: "Icon_Sources/053_Room_Kitchen.png"
+    page: "page1"
+
+  - selector: "#bathroom"
+    output: "Icon_Sources/054_Room_Bathroom.png"
+    page: "page1"
+
+  - selector: "#garage"
+    output: "Icon_Sources/055_Room_Garage.png"
+    page: "page1"
+
+  - selector: "#garden"
+    output: "Icon_Sources/056_Room_Garden.png"
+    page: "page1"
+
+  # =============================================
+  # Page 2: Device Controls
+  # =============================================
+  - selector: "#main-screen"
+    output: "02_Guide_Hitboxes.png"
+    mode: guide
+    full: true
+    page: "page2"
+
+  - selector: "#main-screen"
+    output: "02_Devices.png"
+    mode: base
+    full: true
+    page: "page2"
+
+  - selector: "#back-btn"
+    output: "Icon_Sources/100_Back_Btn.png"
+    page: "page2"
+
   - selector: "#ui-header"
-    output: "Icon_Sources/001_Header.png"
+    output: "Icon_Sources/101_Header.png"
+    page: "page2"
 
   - selector: "#conn-status"
-    output: "Icon_Sources/002_Wifi_Connected.png"
+    output: "Icon_Sources/102_Wifi_Connected.png"
+    page: "page2"
 
   - selector: "#conn-status"
-    output: "Icon_Sources/003_Wifi_Disconnected.png"
+    output: "Icon_Sources/103_Wifi_Disconnected.png"
     setup: "window.toggleConnection()"
+    page: "page2"
 
   - selector: "#sensor-status"
-    output: "Icon_Sources/004_Sensor_Online.png"
+    output: "Icon_Sources/104_Sensor_Online.png"
+    page: "page2"
 
   - selector: "#sensor-status"
-    output: "Icon_Sources/005_Sensor_Offline.png"
+    output: "Icon_Sources/105_Sensor_Offline.png"
     setup: "window.toggleSensor()"
-
-  # --- Control cards: OFF then ON ---
-  - selector: "#ctrl-1"
-    output: "Icon_Sources/010_Light_1_OFF.png"
+    page: "page2"
 
   - selector: "#ctrl-1"
-    output: "Icon_Sources/011_Light_1_ON.png"
+    output: "Icon_Sources/110_Light_1_OFF.png"
+    page: "page2"
+
+  - selector: "#ctrl-1"
+    output: "Icon_Sources/111_Light_1_ON.png"
     setup: "document.querySelector('#ctrl-1 input[type=checkbox]').click()"
+    page: "page2"
 
   - selector: "#ctrl-2"
-    output: "Icon_Sources/012_Fan_1_OFF.png"
+    output: "Icon_Sources/112_Fan_1_OFF.png"
+    page: "page2"
 
   - selector: "#ctrl-2"
-    output: "Icon_Sources/013_Fan_1_ON.png"
+    output: "Icon_Sources/113_Fan_1_ON.png"
     setup: "document.querySelector('#ctrl-2 input[type=checkbox]').click()"
+    page: "page2"
 
   - selector: "#ctrl-3"
-    output: "Icon_Sources/014_Light_2_OFF.png"
+    output: "Icon_Sources/114_Light_2_OFF.png"
+    page: "page2"
 
   - selector: "#ctrl-3"
-    output: "Icon_Sources/015_Light_2_ON.png"
+    output: "Icon_Sources/115_Light_2_ON.png"
     setup: "document.querySelector('#ctrl-3 input[type=checkbox]').click()"
+    page: "page2"
 
   - selector: "#ctrl-4"
-    output: "Icon_Sources/016_Fan_2_OFF.png"
+    output: "Icon_Sources/116_Fan_2_OFF.png"
+    page: "page2"
 
   - selector: "#ctrl-4"
-    output: "Icon_Sources/017_Fan_2_ON.png"
+    output: "Icon_Sources/117_Fan_2_ON.png"
     setup: "document.querySelector('#ctrl-4 input[type=checkbox]').click()"
+    page: "page2"
 
   - selector: "#ctrl-5"
-    output: "Icon_Sources/018_Light_3_OFF.png"
+    output: "Icon_Sources/118_Light_3_OFF.png"
+    page: "page2"
 
   - selector: "#ctrl-5"
-    output: "Icon_Sources/019_Light_3_ON.png"
+    output: "Icon_Sources/119_Light_3_ON.png"
     setup: "document.querySelector('#ctrl-5 input[type=checkbox]').click()"
+    page: "page2"
 
   - selector: "#ctrl-6"
-    output: "Icon_Sources/020_Fan_3_OFF.png"
+    output: "Icon_Sources/120_Fan_3_OFF.png"
+    page: "page2"
 
   - selector: "#ctrl-6"
-    output: "Icon_Sources/021_Fan_3_ON.png"
+    output: "Icon_Sources/121_Fan_3_ON.png"
     setup: "document.querySelector('#ctrl-6 input[type=checkbox]').click()"
+    page: "page2"
 
   - selector: "#ctrl-7"
-    output: "Icon_Sources/022_Television_OFF.png"
+    output: "Icon_Sources/122_Television_OFF.png"
+    page: "page2"
 
   - selector: "#ctrl-7"
-    output: "Icon_Sources/023_Television_ON.png"
+    output: "Icon_Sources/123_Television_ON.png"
     setup: "document.querySelector('#ctrl-7 input[type=checkbox]').click()"
+    page: "page2"
 
   - selector: "#ctrl-8"
-    output: "Icon_Sources/024_Heater_OFF.png"
+    output: "Icon_Sources/124_Heater_OFF.png"
+    page: "page2"
 
   - selector: "#ctrl-8"
-    output: "Icon_Sources/025_Heater_ON.png"
+    output: "Icon_Sources/125_Heater_ON.png"
     setup: "document.querySelector('#ctrl-8 input[type=checkbox]').click()"
+    page: "page2"

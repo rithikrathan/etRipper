@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import Header from "./components/Header";
-import TempDisplay from "./components/TempDisplay";
-import ControlsGrid from "./components/ControlsGrid";
+import Canvas from "./components/Canvas";
+import PageRouter from "./components/PageRouter";
 import "./styles/global.css";
+import "./styles/canvas.css";
 
 function App() {
   const [connected, setConnected] = useState(true);
   const [sensorOnline, setSensorOnline] = useState(true);
+  const [selectedRoom, setSelectedRoom] = useState("living-room");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -21,6 +22,7 @@ function App() {
   useEffect(() => {
     (window as any).toggleConnection = () => setConnected((c) => !c);
     (window as any).toggleSensor = () => setSensorOnline((c) => !c);
+    (window as any).setRoom = (roomId: string) => setSelectedRoom(roomId);
     (window as any).setDgusBaseMode = () => {
       document.body.className = "dgus-base-mode";
     };
@@ -33,19 +35,16 @@ function App() {
   }, []);
 
   return (
-    <div className="device-screen" id="main-screen">
-      <div className="canvas">
-        <Header
-          connected={connected}
-          onToggle={() => setConnected((c) => !c)}
-        />
-        <TempDisplay
-          sensorOnline={sensorOnline}
-          onToggleSensor={() => setSensorOnline((c) => !c)}
-        />
-        <ControlsGrid />
-      </div>
-    </div>
+    <Canvas width={480} height={800}>
+      <PageRouter
+        connected={connected}
+        onToggleConnection={() => setConnected((c) => !c)}
+        sensorOnline={sensorOnline}
+        onToggleSensor={() => setSensorOnline((c) => !c)}
+        selectedRoom={selectedRoom}
+        onSelectRoom={setSelectedRoom}
+      />
+    </Canvas>
   );
 }
 

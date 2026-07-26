@@ -42,10 +42,19 @@ def main():
         page.wait_for_load_state("networkidle")
         time.sleep(1.5)
 
+        current_page = None
+
         for cap in config.get("captures", []):
             selector = cap["selector"]
             dest = out_dir / cap["output"]
             dest.parent.mkdir(parents=True, exist_ok=True)
+
+            # Switch page if needed
+            target_page = cap.get("page")
+            if target_page and target_page != current_page:
+                page.evaluate(f'window.changePage("{target_page}")')
+                time.sleep(0.5)
+                current_page = target_page
 
             mode = cap.get("mode")
             if mode:
